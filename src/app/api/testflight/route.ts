@@ -93,20 +93,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       <div style="display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;">
         Your Lessn TestFlight invite is ready.
       </div>
-      <div style="background:#ffffff;padding:28px 0;">
+      <div style="background:#ffffff;padding:26px 0;">
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center"
                style="width:100%;max-width:640px;background:#ffffff;
                       font-family:'PPNikkeiJournal-Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                       color:#0b1220;">
           <tr>
-            <td style="padding:0 28px 18px 28px;text-align:left;">
+            <td style="padding:0 26px 18px 28px;text-align:left;">
               ${LOGO_URL
             ? `<img src="${LOGO_URL}" width="112" height="28" alt="Lessn" style="display:block;border:0;outline:0;text-decoration:none;"/>`
             : `<div style="font-weight:700;font-size:20px;letter-spacing:.2px;">Lessn</div>`}
             </td>
           </tr>
           <tr>
-            <td style="padding:0 28px;">
+            <td style="padding:0 0px;">
               <h1 style="margin:8px 0 8px 0;font-size:28px;line-height:1.3;font-weight:600;
                          font-family:'PPNikkeiJournal-Semibold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                 Welcome to Lessn
