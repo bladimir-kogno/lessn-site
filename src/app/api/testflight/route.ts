@@ -152,7 +152,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         const text = [
             `Welcome to Lessn`,
             ``,
-            `Hi ${firstName},`
+            `Hi ${firstName}`,
             ``,
             `Your TestFlight invite is ready.`,
             ``,
