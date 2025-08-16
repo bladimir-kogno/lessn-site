@@ -3,11 +3,10 @@ import {Resend} from "resend";
 
 export const runtime = "nodejs";
 
-// --- Simple in-memory rate limit (per server instance) ---
+// in-memory rate limit
 const hits = new Map<string, {count: number; ts: number}>();
-const WINDOW_MS = 60_000; // 1 minute
+const WINDOW_MS = 60_000;
 const MAX = 5;
-
 function rateCheck(ip: string) {
     const now = Date.now();
     const rec = hits.get(ip);
@@ -20,12 +19,12 @@ function rateCheck(ip: string) {
     return true;
 }
 
-// --- Env + Resend setup ---
+// env
 const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
 const TESTFLIGHT_URL = process.env.TESTFLIGHT_URL || "";
 const FROM_EMAIL = process.env.FROM_EMAIL || "Lessn <no-reply@lessn.app>";
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || ""; // optional
-const LOGO_URL = process.env.LOGO_URL || ""; // optional
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "";
+const LOGO_URL = process.env.LOGO_URL || "";
 
 const resend = new Resend(RESEND_API_KEY);
 
@@ -43,13 +42,9 @@ export async function POST(req: NextRequest) {
             req.headers.get("x-real-ip") ||
             "unknown";
         if (!rateCheck(ip)) {
-            return NextResponse.json(
-                {error: "Too many requests, try again in a minute."},
-                {status: 429}
-            );
+            return NextResponse.json({error: "Too many requests, try again in a minute."}, {status: 429});
         }
 
-        // Parse + normalize input
         const body = await req.json();
         const firstName = (body.firstName || "").toString().trim();
         const lastName  = (body.lastName  || "").toString().trim();
@@ -66,14 +61,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({error: "Invalid form data"}, {status: 400});
         }
 
-        // Minimalist, premium HTML (white bg, no card)
+        // minimalist HTML (white bg, no card)
         const primary = "#5f5ffd";
         const html = `
-      <!-- Preheader -->
       <div style="display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;">
         Your Lessn TestFlight invite is ready.
       </div>
-
       <div style="background:#ffffff;padding:28px 0;">
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center"
                style="width:100%;max-width:640px;background:#ffffff;
@@ -86,9 +79,8 @@ export async function POST(req: NextRequest) {
             : `<div style="font-weight:700;font-size:20px;letter-spacing:.2px;">Lessn</div>`}
             </td>
           </tr>
-
           <tr>
-            <td style="padding:0 28px 0 28px;">
+            <td style="padding:0 28px;">
               <h1 style="margin:8px 0 8px 0;font-size:28px;line-height:1.3;font-weight:600;
                          font-family:'PPNikkeiJournal-Semibold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                 Welcome to Lessn
@@ -98,16 +90,14 @@ export async function POST(req: NextRequest) {
               </p>
             </td>
           </tr>
-
           <tr>
-            <td style="padding:0 28px 0 28px;">
+            <td style="padding:0 28px;">
               <a href="${TESTFLIGHT_URL}"
                  style="display:inline-block;background:${primary};color:#ffffff;
                         padding:12px 22px;border-radius:10px;
                         font-size:15px;font-weight:600;text-decoration:none;">
                 Open TestFlight
               </a>
-
               <p style="margin:14px 0 0 0;font-size:13px;line-height:1.5;color:#545869;">
                 Or copy this link:<br/>
                 <a href="${TESTFLIGHT_URL}" style="color:${primary};text-decoration:none;word-break:break-all;">
@@ -116,7 +106,6 @@ export async function POST(req: NextRequest) {
               </p>
             </td>
           </tr>
-
           <tr>
             <td style="padding:22px 28px 0 28px;border-top:1px solid #E8EAF0;">
               <p style="margin:0;font-size:13px;color:#545869;">
@@ -125,7 +114,6 @@ export async function POST(req: NextRequest) {
               </p>
             </td>
           </tr>
-
           <tr>
             <td style="padding:20px 28px 0 28px;text-align:center;font-size:12px;color:#9aa0a6;">
               © ${new Date().getFullYear()} Lessn
@@ -145,7 +133,6 @@ export async function POST(req: NextRequest) {
             `Submitted: Teacher=${isTeacher}, Grade=${gradeLevel || "—"}, Subject=${subject || "—"}`
         ].join("\n");
 
-        // Send to user
         const userSend = await resend.emails.send({
             from: FROM_EMAIL,
             to: email,
@@ -157,7 +144,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({error: "Email send failed"}, {status: 502});
         }
 
-        // Optional: notify your team
         if (ADMIN_EMAIL) {
             const adminHtml = `
         <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#0b1220;">
@@ -191,7 +177,6 @@ export async function POST(req: NextRequest) {
     }
 }
 
-// tiny HTML escaper to avoid accidental HTML injection in emails
 function escapeHtml(s: string) {
     return s
         .replaceAll("&", "&amp;")

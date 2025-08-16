@@ -11,8 +11,10 @@ type Form = {
     isTeacher: "yes" | "no" | "";
     gradeLevel: string;
     subject: string;
-    botField?: string; // honeypot
+    botField?: string;
 };
+
+type ApiResponse = { ok?: boolean; error?: string };
 
 export default function TestFlightModal() {
     const {isOpen, close} = useModal();
@@ -33,10 +35,7 @@ export default function TestFlightModal() {
 
     const firstInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        if (isOpen) firstInputRef.current?.focus();
-    }, [isOpen]);
-
+    useEffect(() => { if (isOpen) firstInputRef.current?.focus(); }, [isOpen]);
     useEffect(() => {
         function onKey(e: KeyboardEvent) { if (e.key === "Escape") close(); }
         if (isOpen) window.addEventListener("keydown", onKey);
@@ -66,7 +65,7 @@ export default function TestFlightModal() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(form)
             });
-            const data: { ok?: boolean; error?: string } = await res.json();
+            const data: ApiResponse = await res.json();
             if (!res.ok) throw new Error(data?.error || "Request failed");
             setDone("ok");
             setToast(`Invite sent to ${form.email}`);
@@ -83,26 +82,11 @@ export default function TestFlightModal() {
 
     return (
         <>
-            <div
-                id="testflight-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="testflight-title"
-                className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            >
-                {/* backdrop */}
+            <div id="testflight-modal" role="dialog" aria-modal="true" aria-labelledby="testflight-title"
+                 className="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <button onClick={close} className="absolute inset-0 bg-black/40" aria-label="Close modal" />
-
-                {/* dialog */}
                 <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-card border border-black/5 p-6">
-                    <button
-                        onClick={close}
-                        className="absolute right-3 top-3 text-black/50 hover:text-black"
-                        aria-label="Close"
-                        type="button"
-                    >
-                        ✕
-                    </button>
+                    <button onClick={close} className="absolute right-3 top-3 text-black/50 hover:text-black" aria-label="Close" type="button">✕</button>
 
                     {done === "ok" ? (
                         <div className="text-center py-6">
@@ -116,52 +100,27 @@ export default function TestFlightModal() {
                             <p className="mt-1 text-black/60">Fill this quick form and we’ll email you the invite.</p>
 
                             <form onSubmit={onSubmit} className="mt-4 grid gap-3" noValidate>
-                                {/* honeypot */}
-                                <input
-                                    type="text"
-                                    name="botField"
-                                    value={form.botField || ""}
-                                    onChange={onChange}
-                                    className="hidden"
-                                    tabIndex={-1}
-                                    autoComplete="off"
-                                />
+                                <input type="text" name="botField" value={form.botField || ""} onChange={onChange}
+                                       className="hidden" tabIndex={-1} autoComplete="off" />
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
                                         <label className="text-sm text-black/70">First name*</label>
-                                        <input
-                                            ref={firstInputRef}
-                                            name="firstName"
-                                            value={form.firstName}
-                                            onChange={onChange}
-                                            required
-                                            className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand"
-                                        />
+                                        <input ref={firstInputRef} name="firstName" value={form.firstName} onChange={onChange}
+                                               required className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand" />
                                     </div>
                                     <div>
                                         <label className="text-sm text-black/70">Last name*</label>
-                                        <input
-                                            name="lastName"
-                                            value={form.lastName}
-                                            onChange={onChange}
-                                            required
-                                            className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand"
-                                        />
+                                        <input name="lastName" value={form.lastName} onChange={onChange}
+                                               required className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand" />
                                     </div>
                                 </div>
 
                                 <div>
                                     <label className="text-sm text-black/70">Email*</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={form.email}
-                                        onChange={onChange}
-                                        required
-                                        pattern="^\\S+@\\S+\\.\\S+$"
-                                        className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand"
-                                    />
+                                    <input type="email" name="email" value={form.email} onChange={onChange} required
+                                           pattern="^\\S+@\\S+\\.\\S+$"
+                                           className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand" />
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -172,27 +131,19 @@ export default function TestFlightModal() {
                                                 <input type="radio" name="isTeacher" value="yes" checked={form.isTeacher === "yes"} onChange={onChange} required /> Yes
                                             </label>
                                             <label className="inline-flex items-center gap-2 text-sm">
-                                                <input type="radio" name="isTeacher" value="no"  checked={form.isTeacher === "no"}  onChange={onChange} required /> No
+                                                <input type="radio" name="isTeacher" value="no" checked={form.isTeacher === "no"} onChange={onChange} required /> No
                                             </label>
                                         </div>
                                     </div>
                                     <div>
                                         <label className="text-sm text-black/70">Grade level</label>
-                                        <input
-                                            name="gradeLevel"
-                                            value={form.gradeLevel}
-                                            onChange={onChange}
-                                            className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand"
-                                        />
+                                        <input name="gradeLevel" value={form.gradeLevel} onChange={onChange}
+                                               className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand" />
                                     </div>
                                     <div>
                                         <label className="text-sm text-black/70">Subject</label>
-                                        <input
-                                            name="subject"
-                                            value={form.subject}
-                                            onChange={onChange}
-                                            className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand"
-                                        />
+                                        <input name="subject" value={form.subject} onChange={onChange}
+                                               className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand" />
                                     </div>
                                 </div>
 
