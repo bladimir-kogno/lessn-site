@@ -3,11 +3,27 @@ import {Resend} from "resend";
 
 export const runtime = "nodejs";
 
+// Define types for better TypeScript compliance
+interface RateLimitRecord {
+    count: number;
+    ts: number;
+}
+
+interface RequestBody {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    isTeacher?: string;
+    gradeLevel?: string;
+    subject?: string;
+    botField?: string;
+}
+
 // in-memory rate limit
-const hits = new Map<string, {count: number; ts: number}>();
+const hits = new Map<string, RateLimitRecord>();
 const WINDOW_MS = 60_000;
 const MAX = 5;
-function rateCheck(ip: string) {
+function rateCheck(ip: string): boolean {
     const now = Date.now();
     const rec = hits.get(ip);
     if (!rec || now - rec.ts > WINDOW_MS) {
@@ -28,7 +44,7 @@ const LOGO_URL = process.env.LOGO_URL || "";
 
 const resend = new Resend(RESEND_API_KEY);
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
     try {
         if (!RESEND_API_KEY || !TESTFLIGHT_URL) {
             return NextResponse.json(
@@ -45,7 +61,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({error: "Too many requests, try again in a minute."}, {status: 429});
         }
 
-        const body = await req.json();
+        const body = await req.json() as RequestBody;
         const firstName = (body.firstName || "").toString().trim();
         const lastName  = (body.lastName  || "").toString().trim();
         const email     = (body.email     || "").toString().trim();
@@ -170,14 +186,14 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json({ok: true});
-    } catch (err) {
+    } catch (err: unknown) {
         const message = err instanceof Error ? err.message : "Unknown server error";
         console.error(err);
         return NextResponse.json({error: message}, {status: 500});
     }
 }
 
-function escapeHtml(s: string) {
+function escapeHtml(s: string): string {
     return s
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
