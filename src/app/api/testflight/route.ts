@@ -133,7 +133,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             </td>
           </tr>
           <tr>
-            <td style="padding:22px 0 0 28px;border-top:1px solid #E8EAF0;">
+            <td style="padding:22px 0 0 0;border-top:1px solid #E8EAF0;">
               <p style="margin:0;font-size:13px;color:#545869;">
                 <strong style="color:#0b1220;">Submitted</strong> · Teacher: ${escapeHtml(isTeacher)} ·
                 Grade: ${escapeHtml(gradeLevel || "—")} · Subject: ${escapeHtml(subject || "—")}
@@ -147,12 +147,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           </tr>
           
           <tr>
-  <td style="padding:16px 28px 28px 28px;font-size:11px;color:#9aa0a6;line-height:1.4;text-align:left;">
+  <td style="padding:16px 0 0 0;font-size:11px;color:#9aa0a6;line-height:1.4;text-align:left;">
     This email and any links contained within are provided solely for participation in the Brinl app TestFlight program. TestFlight access is offered at Brinl's discretion and may be withdrawn at any time. Participation does not create any commercial, employment, or agency relationship between you and Brinl.<br/><br/>
     By clicking the TestFlight link, you acknowledge and agree that:<br/>
-    • The Brinl app is provided on a <strong>beta/pre-release basis</strong> and may contain errors or limited functionality.<br/>
-    • Brinl, LLC makes <strong>no warranties, express or implied</strong>, regarding the beta app, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.<br/>
-    • To the maximum extent permitted by law, Brinl, LLC shall not be liable for any damages or losses arising out of your participation in the beta program.<br/><br/>
+    <ul>
+   <li> • The Brinl app is provided on a <strong>beta/pre-release basis</strong> and may contain errors or limited functionality.</li>
+     <li> • Brinl, LLC makes <strong>no warranties, express or implied</strong>, regarding the beta app, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</li>
+     <li> • To the maximum extent permitted by law, Brinl, LLC shall not be liable for any damages or losses arising out of your participation in the beta program.</li>
+    </ul>
     Your data is handled in accordance with our Privacy Policy and Terms of Service. If you do not wish to receive further communications about beta testing, you may unsubscribe at any time.
   </td>
 </tr>
