@@ -117,7 +117,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             </td>
           </tr>
           <tr>
-            <td style="">
+            <td style="padding-bottom: 22px">
               <a href="${TESTFLIGHT_URL}"
                  style="display:inline-block;background:${primary};color:#ffffff;
                         padding:12px 22px;border-radius:10px;
