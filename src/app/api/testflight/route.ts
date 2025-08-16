@@ -23,6 +23,7 @@ interface RequestBody {
 const hits = new Map<string, RateLimitRecord>();
 const WINDOW_MS = 60_000;
 const MAX = 5;
+
 function rateCheck(ip: string): boolean {
     const now = Date.now();
     const rec = hits.get(ip);
@@ -43,6 +44,15 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "";
 const LOGO_URL = process.env.LOGO_URL || "";
 
 const resend = new Resend(RESEND_API_KEY);
+
+function escapeHtml(s: string): string {
+    return s
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
     try {
@@ -191,13 +201,4 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         console.error(err);
         return NextResponse.json({error: message}, {status: 500});
     }
-}
-
-function escapeHtml(s: string): string {
-    return s
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
 }

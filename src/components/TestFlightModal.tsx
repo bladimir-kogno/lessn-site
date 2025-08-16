@@ -16,7 +16,7 @@ type Form = {
 
 type ApiResponse = { ok?: boolean; error?: string };
 
-export default function TestFlightModal() {
+export default function TestFlightModal(): JSX.Element | null {
     const {isOpen, close} = useModal();
 
     const [form, setForm] = useState<Form>({
@@ -28,26 +28,31 @@ export default function TestFlightModal() {
         subject: "",
         botField: ""
     });
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const [done, setDone] = useState<null | "ok" | "err">(null);
-    const [msg, setMsg] = useState("");
-    const [toast, setToast] = useState("");
+    const [msg, setMsg] = useState<string>("");
+    const [toast, setToast] = useState<string>("");
 
     const firstInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => { if (isOpen) firstInputRef.current?.focus(); }, [isOpen]);
     useEffect(() => {
-        function onKey(e: KeyboardEvent) { if (e.key === "Escape") close(); }
+        if (isOpen) firstInputRef.current?.focus();
+    }, [isOpen]);
+
+    useEffect(() => {
+        function onKey(e: KeyboardEvent): void {
+            if (e.key === "Escape") close();
+        }
         if (isOpen) window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
     }, [isOpen, close]);
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const {name, value} = e.target;
         setForm((f) => ({...f, [name]: value}));
     };
 
-    async function onSubmit(e: React.FormEvent) {
+    async function onSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
         e.preventDefault();
         if (form.botField) return;
 
@@ -65,7 +70,7 @@ export default function TestFlightModal() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(form)
             });
-            const data: ApiResponse = await res.json();
+            const data = await res.json() as ApiResponse;
             if (!res.ok) throw new Error(data?.error || "Request failed");
             setDone("ok");
             setToast(`Invite sent to ${form.email}`);
@@ -91,13 +96,13 @@ export default function TestFlightModal() {
                     {done === "ok" ? (
                         <div className="text-center py-6">
                             <h3 id="testflight-title" className="text-2xl font-bold">Check your email</h3>
-                            <p className="mt-2 text-black/70">We’ve sent your TestFlight link. It may take a minute to arrive.</p>
+                            <p className="mt-2 text-black/70">We've sent your TestFlight link. It may take a minute to arrive.</p>
                             <button className="btn mt-6" onClick={close} type="button">Close</button>
                         </div>
                     ) : (
                         <>
                             <h3 id="testflight-title" className="text-2xl font-bold">Get TestFlight</h3>
-                            <p className="mt-1 text-black/60">Fill this quick form and we’ll email you the invite.</p>
+                            <p className="mt-1 text-black/60">Fill this quick form and we'll email you the invite.</p>
 
                             <form onSubmit={onSubmit} className="mt-4 grid gap-3" noValidate>
                                 <input type="text" name="botField" value={form.botField || ""} onChange={onChange}
