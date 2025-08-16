@@ -17,7 +17,6 @@ type Form = {
 export default function TestFlightModal() {
     const {isOpen, close} = useModal();
 
-    // include botField in state to avoid any-casts
     const [form, setForm] = useState<Form>({
         firstName: "",
         lastName: "",
@@ -39,9 +38,7 @@ export default function TestFlightModal() {
     }, [isOpen]);
 
     useEffect(() => {
-        function onKey(e: KeyboardEvent) {
-            if (e.key === "Escape") close();
-        }
+        function onKey(e: KeyboardEvent) { if (e.key === "Escape") close(); }
         if (isOpen) window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
     }, [isOpen, close]);
@@ -53,9 +50,8 @@ export default function TestFlightModal() {
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (form.botField) return; // spam
+        if (form.botField) return;
 
-        // basic client validation
         const emailOk = /^\S+@\S+\.\S+$/.test(form.email);
         if (!form.firstName || !form.lastName || !emailOk || !form.isTeacher) {
             setMsg("Please complete required fields.");
@@ -110,24 +106,14 @@ export default function TestFlightModal() {
 
                     {done === "ok" ? (
                         <div className="text-center py-6">
-                            <h3 id="testflight-title" className="text-2xl font-bold">
-                                Check your email
-                            </h3>
-                            <p className="mt-2 text-black/70">
-                                We’ve sent your TestFlight link. It may take a minute to arrive.
-                            </p>
-                            <button className="btn mt-6" onClick={close} type="button">
-                                Close
-                            </button>
+                            <h3 id="testflight-title" className="text-2xl font-bold">Check your email</h3>
+                            <p className="mt-2 text-black/70">We’ve sent your TestFlight link. It may take a minute to arrive.</p>
+                            <button className="btn mt-6" onClick={close} type="button">Close</button>
                         </div>
                     ) : (
                         <>
-                            <h3 id="testflight-title" className="text-2xl font-bold">
-                                Get TestFlight
-                            </h3>
-                            <p className="mt-1 text-black/60">
-                                Fill this quick form and we’ll email you the invite.
-                            </p>
+                            <h3 id="testflight-title" className="text-2xl font-bold">Get TestFlight</h3>
+                            <p className="mt-1 text-black/60">Fill this quick form and we’ll email you the invite.</p>
 
                             <form onSubmit={onSubmit} className="mt-4 grid gap-3" noValidate>
                                 {/* honeypot */}
@@ -183,26 +169,10 @@ export default function TestFlightModal() {
                                         <label className="text-sm text-black/70">Teacher?*</label>
                                         <div className="mt-1 flex gap-3">
                                             <label className="inline-flex items-center gap-2 text-sm">
-                                                <input
-                                                    type="radio"
-                                                    name="isTeacher"
-                                                    value="yes"
-                                                    checked={form.isTeacher === "yes"}
-                                                    onChange={onChange}
-                                                    required
-                                                />{" "}
-                                                Yes
+                                                <input type="radio" name="isTeacher" value="yes" checked={form.isTeacher === "yes"} onChange={onChange} required /> Yes
                                             </label>
                                             <label className="inline-flex items-center gap-2 text-sm">
-                                                <input
-                                                    type="radio"
-                                                    name="isTeacher"
-                                                    value="no"
-                                                    checked={form.isTeacher === "no"}
-                                                    onChange={onChange}
-                                                    required
-                                                />{" "}
-                                                No
+                                                <input type="radio" name="isTeacher" value="no"  checked={form.isTeacher === "no"}  onChange={onChange} required /> No
                                             </label>
                                         </div>
                                     </div>

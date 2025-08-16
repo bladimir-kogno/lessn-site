@@ -1,7 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import {Resend} from "resend";
 
-// Ensure Node runtime (Resend needs Node, not Edge)
 export const runtime = "nodejs";
 
 // --- Simple in-memory rate limit (per server instance) ---
@@ -32,7 +31,6 @@ const resend = new Resend(RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
     try {
-        // Guard required env
         if (!RESEND_API_KEY || !TESTFLIGHT_URL) {
             return NextResponse.json(
                 {error: "Server not configured (missing RESEND_API_KEY or TESTFLIGHT_URL)."},
@@ -40,7 +38,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Rate limit
         const ip =
             req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
             req.headers.get("x-real-ip") ||
@@ -55,19 +52,15 @@ export async function POST(req: NextRequest) {
         // Parse + normalize input
         const body = await req.json();
         const firstName = (body.firstName || "").toString().trim();
-        const lastName = (body.lastName || "").toString().trim();
-        const email = (body.email || "").toString().trim();
+        const lastName  = (body.lastName  || "").toString().trim();
+        const email     = (body.email     || "").toString().trim();
         const isTeacher = (body.isTeacher || "").toString().trim(); // "yes" | "no"
-        const gradeLevel = (body.gradeLevel || "").toString().trim();
-        const subject = (body.subject || "").toString().trim();
-        const botField = (body.botField || "").toString();
+        const gradeLevel= (body.gradeLevel|| "").toString().trim();
+        const subject   = (body.subject   || "").toString().trim();
+        const botField  = (body.botField  || "").toString();
 
-        // Honeypot
-        if (botField) {
-            return NextResponse.json({ok: true}, {status: 200});
-        }
+        if (botField) return NextResponse.json({ok: true}, {status: 200});
 
-        // Basic validation
         const emailOk = /^\S+@\S+\.\S+$/.test(email);
         if (!firstName || !lastName || !emailOk || (isTeacher !== "yes" && isTeacher !== "no")) {
             return NextResponse.json({error: "Invalid form data"}, {status: 400});
@@ -192,7 +185,6 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ok: true});
     } catch (err) {
-        // keep logs but avoid `any`
         const message = err instanceof Error ? err.message : "Unknown server error";
         console.error(err);
         return NextResponse.json({error: message}, {status: 500});
