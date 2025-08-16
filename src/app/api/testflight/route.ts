@@ -142,8 +142,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           </tr>
           <tr>
             <td style="padding:20px 28px 0 28px;text-align:center;font-size:12px;color:#9aa0a6;">
-              © ${new Date().getFullYear()} Lessn by Brinl, LLC. All rights reserved,
+              © ${new Date().getFullYear()} Lessn by Brinl, LLC. All rights reserved.
             </td>
+            
+            <td>
+            This email and any links contained within are provided solely for participation in the Brinl app TestFlight program. TestFlight access is offered at Brinl’s discretion and may be withdrawn at any time. Participation does not create any commercial, employment, or agency relationship between you and Brinl.
+By clicking the TestFlight link, you acknowledge and agree that:
+The Brinl app is provided on a beta/pre-release basis and may contain errors or limited functionality.
+Brinl, LLC makes no warranties, express or implied, regarding the beta app, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.
+To the maximum extent permitted by law, Brinl, LLC shall not be liable for any damages or losses arising out of your participation in the beta program.
+Your data is handled under our Privacy Policy and Terms of Service. If you do not wish to receive further communications about beta testing, you may unsubscribe at any time.
+</td>
           </tr>
         </table>
       </div>
