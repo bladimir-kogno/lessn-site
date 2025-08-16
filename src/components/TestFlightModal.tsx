@@ -1,7 +1,7 @@
 "use client";
 
+import React, {useEffect, useRef, useState} from "react";
 import {useModal} from "@/components/ModalProvider";
-import {useEffect, useRef, useState} from "react";
 import Toast from "@/components/Toast";
 
 type Form = {
@@ -16,7 +16,7 @@ type Form = {
 
 type ApiResponse = { ok?: boolean; error?: string };
 
-export default function TestFlightModal(): JSX.Element | null {
+export default function TestFlightModal(): React.JSX.Element | null {
     const {isOpen, close} = useModal();
 
     const [form, setForm] = useState<Form>({
@@ -71,7 +71,9 @@ export default function TestFlightModal(): JSX.Element | null {
                 body: JSON.stringify(form)
             });
             const data = await res.json() as ApiResponse;
-            if (!res.ok) throw new Error(data?.error || "Request failed");
+            if (!res.ok) {
+                throw new Error(data?.error || "Request failed");
+            }
             setDone("ok");
             setToast(`Invite sent to ${form.email}`);
         } catch (err: unknown) {
@@ -96,13 +98,13 @@ export default function TestFlightModal(): JSX.Element | null {
                     {done === "ok" ? (
                         <div className="text-center py-6">
                             <h3 id="testflight-title" className="text-2xl font-bold">Check your email</h3>
-                            <p className="mt-2 text-black/70">We've sent your TestFlight link. It may take a minute to arrive.</p>
+                            <p className="mt-2 text-black/70">We&apos;ve sent your TestFlight link. It may take a minute to arrive.</p>
                             <button className="btn mt-6" onClick={close} type="button">Close</button>
                         </div>
                     ) : (
                         <>
                             <h3 id="testflight-title" className="text-2xl font-bold">Get TestFlight</h3>
-                            <p className="mt-1 text-black/60">Fill this quick form and we'll email you the invite.</p>
+                            <p className="mt-1 text-black/60">Fill this quick form and we&apos;ll email you the invite.</p>
 
                             <form onSubmit={onSubmit} className="mt-4 grid gap-3" noValidate>
                                 <input type="text" name="botField" value={form.botField || ""} onChange={onChange}
