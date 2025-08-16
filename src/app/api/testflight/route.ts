@@ -93,21 +93,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       <div style="display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;">
         Your Lessn TestFlight invite is ready.
       </div>
-      <div style="background:#ffffff;padding:26px 0;">
+      <div style="background:#ffffff;">
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center"
                style="width:100%;max-width:640px;background:#ffffff;
                       font-family:'PPNikkeiJournal-Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                       color:#0b1220;">
           <tr>
-            <td style="padding:0 26px 18px 28px;text-align:left;">
+            <td style="text-align:left;">
               ${LOGO_URL
             ? `<img src="${LOGO_URL}" width="112" height="28" alt="Lessn" style="display:block;border:0;outline:0;text-decoration:none;"/>`
             : `<div style="font-weight:700;font-size:20px;letter-spacing:.2px;">Lessn</div>`}
             </td>
           </tr>
           <tr>
-            <td style="padding:0 0px;">
-              <h1 style="margin:8px 0 8px 0;font-size:28px;line-height:1.3;font-weight:600;
+            <td style="">
+              <h1 style="margin:16px 0 10px 0;font-size:28px;line-height:1.3;font-weight:600;
                          font-family:'PPNikkeiJournal-Semibold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                 Welcome to Lessn
               </h1>
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             </td>
           </tr>
           <tr>
-            <td style="padding:0 28px;">
+            <td style="">
               <a href="${TESTFLIGHT_URL}"
                  style="display:inline-block;background:${primary};color:#ffffff;
                         padding:12px 22px;border-radius:10px;
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             </td>
           </tr>
           <tr>
-            <td style="padding:22px 28px 0 28px;border-top:1px solid #E8EAF0;">
+            <td style="padding:22px 0 0 28px;border-top:1px solid #E8EAF0;">
               <p style="margin:0;font-size:13px;color:#545869;">
                 <strong style="color:#0b1220;">Submitted</strong> · Teacher: ${escapeHtml(isTeacher)} ·
                 Grade: ${escapeHtml(gradeLevel || "—")} · Subject: ${escapeHtml(subject || "—")}
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           </tr>
           <tr>
             <td style="padding:20px 28px 0 28px;text-align:center;font-size:12px;color:#9aa0a6;">
-              © ${new Date().getFullYear()} Lessn
+              © ${new Date().getFullYear()} Lessn by Brinl, LLC. All rights reserved,
             </td>
           </tr>
         </table>
@@ -152,7 +152,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         const text = [
             `Welcome to Lessn`,
             ``,
-            `Hi ${firstName}, your TestFlight invite is ready.`,
+            `Hi ${firstName},`
+            ``,
+            `Your TestFlight invite is ready.`,
             ``,
             `Open TestFlight: ${TESTFLIGHT_URL}`,
             ``,
