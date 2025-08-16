@@ -10,11 +10,11 @@ export default function Hero({ imageUrl }: Props) {
             <div className="container-page py-14 sm:py-20 lg:py-24">
                 <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
                     <div>
-                        <span className="badge">Lesson planning</span>
-                        <h1 className="h1 mt-4">Plan in minutes. Teach with focus.</h1>
+                        <span className="badge">Refined lesson planning</span>
+                        <h1 className="h1 mt-4">Plan in minutes. Teach with focus. Deliver smarter.</h1>
                         <p className="muted mt-4 text-lg">
                             Lessn generates complete lesson plans, adapts for different needs, and keeps everything
-                            organized—so you spend less time planning and more time teaching.
+                            organized, so you spend less time planning and more time teaching.
                         </p>
 
                         {/* Actions */}
@@ -35,7 +35,7 @@ export default function Hero({ imageUrl }: Props) {
                         <div className="aspect-[16/10] sm:aspect-[16/9] lg:aspect-[5/4] w-full rounded-xl2 overflow-hidden border border-black/5 shadow-card">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src={imageUrl}
+                                src="https://res.cloudinary.com/dvexnl19a/image/upload/v1755384930/lessn_image1_rag63f.jpg"
                                 alt="Lessn app preview"
                                 className="h-full w-full object-cover"
                                 loading="eager"
