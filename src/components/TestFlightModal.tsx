@@ -17,30 +17,28 @@ type Form = {
 export default function TestFlightModal() {
     const {isOpen, close} = useModal();
 
-    // form state
+    // include botField in state to avoid any-casts
     const [form, setForm] = useState<Form>({
         firstName: "",
         lastName: "",
         email: "",
         isTeacher: "",
         gradeLevel: "",
-        subject: ""
+        subject: "",
+        botField: ""
     });
     const [loading, setLoading] = useState(false);
     const [done, setDone] = useState<null | "ok" | "err">(null);
     const [msg, setMsg] = useState("");
-
-    // UX upgrades
     const [toast, setToast] = useState("");
+
     const firstInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        // focus first field when opened
         if (isOpen) firstInputRef.current?.focus();
     }, [isOpen]);
 
     useEffect(() => {
-        // ESC to close
         function onKey(e: KeyboardEvent) {
             if (e.key === "Escape") close();
         }
@@ -55,12 +53,11 @@ export default function TestFlightModal() {
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
-        // spam honeypot
-        // @ts-expect-error: exists if present
-        if (form.botField) return;
+        if (form.botField) return; // spam
 
         // basic client validation
-        if (!form.firstName || !form.lastName || !/^\S+@\S+\.\S+$/.test(form.email) || !form.isTeacher) {
+        const emailOk = /^\S+@\S+\.\S+$/.test(form.email);
+        if (!form.firstName || !form.lastName || !emailOk || !form.isTeacher) {
             setMsg("Please complete required fields.");
             return;
         }
@@ -73,13 +70,14 @@ export default function TestFlightModal() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(form)
             });
-            const data = await res.json();
+            const data: { ok?: boolean; error?: string } = await res.json();
             if (!res.ok) throw new Error(data?.error || "Request failed");
             setDone("ok");
             setToast(`Invite sent to ${form.email}`);
-        } catch (err: any) {
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "Something went wrong.";
             setDone("err");
-            setMsg(err?.message || "Something went wrong.");
+            setMsg(message);
         } finally {
             setLoading(false);
         }
@@ -136,7 +134,7 @@ export default function TestFlightModal() {
                                 <input
                                     type="text"
                                     name="botField"
-                                    value={(form as any).botField || ""}
+                                    value={form.botField || ""}
                                     onChange={onChange}
                                     className="hidden"
                                     tabIndex={-1}
@@ -175,7 +173,7 @@ export default function TestFlightModal() {
                                         value={form.email}
                                         onChange={onChange}
                                         required
-                                        pattern="^\S+@\S+\.\S+$"
+                                        pattern="^\\S+@\\S+\\.\\S+$"
                                         className="mt-1 w-full rounded-lg border border-black/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand"
                                     />
                                 </div>
@@ -241,7 +239,6 @@ export default function TestFlightModal() {
                 </div>
             </div>
 
-            {/* success toast */}
             <Toast text={toast} />
         </>
     );
