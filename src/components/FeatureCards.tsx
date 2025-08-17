@@ -4,13 +4,13 @@ import FeedbackIcon from "@/icons/Feedback";
 
 const features = [
     {
-        title: "Plan in seconds",
-        desc: "Structure objectives, timing, and resources in less time—directly from the materials you already use.",
+        title: "Planning, simplified",
+        desc: "Structure objectives, timing, and resources in less time, directly from the materials you already use.",
         icon: PlanIcon,
     },
     {
         title: "Differentiation built in",
-        desc: "Adjust lessons to match student levels, language needs, and accommodations—quickly and clearly.",
+        desc: "Adjust lessons to match student levels, language needs, and accommodations, quickly and clearly.",
         icon: DifferentiationIcon,
     },
     {
@@ -24,7 +24,6 @@ export default function FeatureCards() {
     return (
         <section id="features" className="container-page py-14 sm:py-16">
             <h2 className="h2 text-center">
-                Purpose-built for real classrooms<br />
                 Only what you need to plan faster, adapt better, and stay in control.
             </h2>
             <p className="muted text-center mt-2">

@@ -11,7 +11,8 @@ export default function Footer() {
                     <a href="/terms" className="hover:opacity-70">Terms</a>
                     <a href="mailto:hello@lessn.app" className="hover:opacity-70">Contact</a>
                 </div>
-                <div className="text-black/60">© {new Date().getFullYear()} Lessn</div>
+                <div className="text-black/60">Lessn is built by Brinl, LLC.</div>
+                <div className="text-black/60">© {new Date().getFullYear()} Brinl, LLC. All rights reserved.</div>
             </div>
         </footer>
     );

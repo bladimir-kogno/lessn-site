@@ -2,7 +2,7 @@
 import {useState} from "react";
 
 const SHOTS = [
-    {src: "/images/screen-1.png", caption: "AI Lesson Generator"},
+    {src: "/images/screen-1.png", caption: "Smart Lesson Generator"},
     {src: "/images/screen-2.png", caption: "Differentiated Activities"},
     {src: "/images/screen-3.png", caption: "Export & Share Instantly"},
 ];
