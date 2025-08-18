@@ -2,7 +2,7 @@
 import {useState} from "react";
 
 const SHOTS = [
-    {src: "/images/screen-1.png", caption: "Smart Lesson Generator"},
+    {src: "/images/lessn_app_screen1.png", caption: "Smart Lesson Generator"},
     {src: "/images/screen-2.png", caption: "Differentiated Activities"},
     {src: "/images/screen-3.png", caption: "Export & Share Instantly"},
 ];
@@ -15,9 +15,12 @@ export default function Screenshots() {
         <section id="screens" className="container-page py-16">
             <h2 className="h2 text-center">See Lessn in Action</h2>
             <div className="mt-8 relative max-w-4xl mx-auto">
-                <div className="aspect-[9/16] w-full overflow-hidden rounded-xl2 border border-black/5 shadow-card bg-white">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={SHOTS[i].src} alt={SHOTS[i].caption} className="h-full w-full object-cover" />
+                <div className="inline-block overflow-hidden rounded-2xl border border-black/5 shadow-card bg-white">
+                    <img
+                        src={SHOTS[i].src}
+                        alt={SHOTS[i].caption}
+                        className="max-w-full h-auto object-contain"
+                    />
                 </div>
 
                 <button

@@ -12,13 +12,19 @@ export default function CTA() {
                 </div>
 
                 {IOS_URL ? (
-                    <a href={IOS_URL} className="btn bg-white text-brand hover:bg-white/90" aria-label="Download on the App Store">
+                    <a
+                        href={IOS_URL}
+                        className="btn bg-[#393998] text-white hover:bg-[#393998] focus:bg-[#393998] active:bg-[#393998]"
+                        aria-label="Download on the App Store"
+                    >
                         Download on the App Store
                     </a>
+
                 ) : (
-                    <GetTestFlightButton className="bg-white text-brand hover:bg-white/90" />
+                    <GetTestFlightButton className="bg-[#393998] text-white" />
                 )}
             </div>
         </section>
     );
 }
+
