@@ -1,94 +1,53 @@
 "use client";
-
 import Link from "next/link";
-import { useState } from "react";
-import GetTestFlightButton from "@/components/GetTestFlightButton";
+import Image from "next/image";
 
-export default function Nav() {
-    const [menuOpen, setMenuOpen] = useState(false);
+export default function MobileNav() {
+    const IOS_URL = process.env.NEXT_PUBLIC_IOS_URL ?? "/download";
 
     return (
-        <nav className="bg-[#1c1c4c] text-white shadow-md">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                    {/* Logo / Brand */}
-                    <Link href="/" className="text-2xl font-bold text-[#5f5ffd]">
-                        Lessn
-                    </Link>
+        <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-black/5">
+            {/* Safe area + compact height like the screenshot */}
+            <div className="flex items-center justify-between px-4 py-3">
+                {/* Left: Logo */}
+                <Link href="/" className="flex items-center">
+                    <Image
+                        src="/brinl_logo.svg" // your logo in /public
+                        alt="Lessn"
+                        width={28}
+                        height={28}
+                        priority
+                    />
+                </Link>
 
-                    {/* Desktop Menu */}
-                    <div className="hidden md:flex items-center space-x-6">
-                        <Link href="#features" className="hover:text-[#7f7ffd]">
-                            Features
-                        </Link>
-                        <Link href="#contact" className="hover:text-[#7f7ffd]">
-                            Contact
-                        </Link>
-                        {/* TestFlight Button */}
-                        <GetTestFlightButton className="ml-4" />
-                    </div>
+                {/* Right: CTA + Hamburger */}
+                <div className="flex items-center gap-3">
+                    <a
+                        href={IOS_URL}
+                        className="inline-flex items-center rounded-md bg-black px-4 py-2 text-xs font-semibold text-white leading-none active:scale-[0.99] transition"
+                    >
+                        Get Lessn free
+                    </a>
 
-                    {/* Mobile Hamburger */}
                     <button
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        className="md:hidden focus:outline-none"
-                        aria-label="Toggle menu"
+                        type="button"
+                        aria-label="Open menu"
+                        className="inline-flex h-9 w-9 items-center justify-center hover:bg-gray-100 active:scale-[0.98] transition rounded-md"
                     >
                         <svg
-                            className="w-6 h-6"
+                            className="h-5 w-5 text-black"
+                            viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         >
-                            {menuOpen ? (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            ) : (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            )}
+                            <path d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 </div>
             </div>
-
-            {/* Mobile Menu */}
-            {menuOpen && (
-                <div className="md:hidden px-4 pb-4 space-y-3">
-                    <Link
-                        href="#features"
-                        className="block hover:text-[#7f7ffd]"
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        Features
-                    </Link>
-                    <Link
-                        href="#pricing"
-                        className="block hover:text-[#7f7ffd]"
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        Pricing
-                    </Link>
-                    <Link
-                        href="#contact"
-                        className="block hover:text-[#7f7ffd]"
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        Contact
-                    </Link>
-                    {/* TestFlight Button in mobile */}
-                    <GetTestFlightButton className="block w-full mt-3" />
-                </div>
-            )}
         </nav>
     );
 }

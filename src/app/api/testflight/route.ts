@@ -112,7 +112,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 Welcome to Lessn
               </h1>
               <p style="margin:0 0 18px 0;font-size:16px;line-height:1.6;color:#545869;">
-                Hi ${escapeHtml(firstName)},<br />
+                Hi ${escapeHtml(firstName)},<br /><br />
                 Your TestFlight invite is ready. Try your next unit with faster planning and clearer focus.
               </p>
             </td>
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             </td>
           </tr>
           <tr>
-            <td style="padding:20px 28px 0 28px;text-align:center;font-size:12px;color:#9aa0a6;">
+            <td style="padding:20px 28px 0 28px;text-align:left;font-size:12px;color:#9aa0a6;">
               © ${new Date().getFullYear()} Lessn by Brinl, LLC. All rights reserved.
             </td>
           </tr>
