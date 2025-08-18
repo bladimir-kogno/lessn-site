@@ -112,7 +112,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 Welcome to Lessn
               </h1>
               <p style="margin:0 0 18px 0;font-size:16px;line-height:1.6;color:#545869;">
-                Hi ${escapeHtml(firstName)}, your TestFlight invite is ready. Try your next unit with faster planning and clearer focus.
+                Hi ${escapeHtml(firstName)},<br />
+                Your TestFlight invite is ready. Try your next unit with faster planning and clearer focus.
               </p>
             </td>
           </tr>

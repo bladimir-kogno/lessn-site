@@ -3,7 +3,7 @@ import ModalProvider from "@/components/ModalProvider";
 
 export const metadata = {
     title: "Lessn: Plan in minutes. Teach with focus.",
-    description: "Learn faster. teach better."
+    description: "Learn faster. Teach better."
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
