@@ -6,19 +6,16 @@ import { useEffect, useRef, useState } from "react";
 export default function Nav() {
     const IOS_URL = process.env.NEXT_PUBLIC_IOS_URL ?? "/download";
     const [open, setOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
+    const [panelHeight, setPanelHeight] = useState(0);
 
-    // Close on outside click
+    // Measure content height for smooth max-height animation
     useEffect(() => {
-        function onDocClick(e: MouseEvent) {
-            if (!menuRef.current) return;
-            if (!menuRef.current.contains(e.target as Node)) setOpen(false);
-        }
-        if (open) document.addEventListener("mousedown", onDocClick);
-        return () => document.removeEventListener("mousedown", onDocClick);
+        if (!panelRef.current) return;
+        setPanelHeight(panelRef.current.scrollHeight);
     }, [open]);
 
-    // Close on Escape
+    // Close on Escape (mobile)
     useEffect(() => {
         function onKey(e: KeyboardEvent) {
             if (e.key === "Escape") setOpen(false);
@@ -35,9 +32,9 @@ export default function Nav() {
                     <Image src="/brinl_logo.svg" alt="Lessn" width={28} height={28} priority />
                 </Link>
 
-                {/* Right: CTA + Links (desktop) + Burger (mobile) */}
-                <div className="relative flex items-center gap-4" ref={menuRef}>
-                    {/* CTA button (always visible) */}
+                {/* Right: CTA + Desktop links + Burger */}
+                <div className="flex items-center gap-4">
+                    {/* CTA (always visible) */}
                     <a
                         href={IOS_URL}
                         className="inline-flex items-center rounded-md bg-black px-4 py-2 text-xs md:text-sm font-semibold text-white leading-none active:scale-[0.99] transition"
@@ -51,13 +48,13 @@ export default function Nav() {
                         <Link href="#contact" className="hover:text-black transition">Contact</Link>
                     </div>
 
-                    {/* Mobile burger (no hover effect) */}
+                    {/* Burger (mobile only, no hover effect) */}
                     <button
                         type="button"
                         aria-label="Open menu"
                         aria-expanded={open}
-                        aria-controls="mobile-menu"
-                        onClick={() => setOpen((v) => !v)}
+                        aria-controls="mobile-panel"
+                        onClick={() => setOpen(v => !v)}
                         className="inline-flex h-9 w-9 items-center justify-center rounded-md md:hidden active:scale-[0.98] transition"
                     >
                         <svg
@@ -72,33 +69,33 @@ export default function Nav() {
                             <path d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
+                </div>
+            </div>
 
-                    {/* Mobile dropdown */}
-                    {open && (
-                        <div
-                            id="mobile-menu"
-                            role="menu"
-                            aria-label="Main menu"
-                            className="absolute right-0 top-[calc(100%+8px)] w-48 overflow-hidden rounded-lg border border-black/10 bg-white shadow-lg ring-1 ring-black/5 md:hidden"
+            {/* MOBILE COLLAPSIBLE PANEL (in flow, pushes content) */}
+            <div
+                id="mobile-panel"
+                className="md:hidden overflow-hidden transition-[max-height] duration-200 ease-out border-t border-black/5"
+                style={{ maxHeight: open ? panelHeight : 0 }}
+            >
+                {/* Measure actual content height */}
+                <div ref={panelRef}>
+                    <div className="px-4 py-2">
+                        <Link
+                            href="#features"
+                            className="block px-1 py-3 text-sm text-gray-900"
+                            onClick={() => setOpen(false)}
                         >
-                            <Link
-                                href="#features"
-                                role="menuitem"
-                                className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50"
-                                onClick={() => setOpen(false)}
-                            >
-                                Features
-                            </Link>
-                            <Link
-                                href="#contact"
-                                role="menuitem"
-                                className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50"
-                                onClick={() => setOpen(false)}
-                            >
-                                Contact
-                            </Link>
-                        </div>
-                    )}
+                            Features
+                        </Link>
+                        <Link
+                            href="#contact"
+                            className="block px-1 py-3 text-sm text-gray-900"
+                            onClick={() => setOpen(false)}
+                        >
+                            Contact
+                        </Link>
+                    </div>
                 </div>
             </div>
         </nav>
