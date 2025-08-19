@@ -9,38 +9,33 @@ export default function Nav() {
     const panelRef = useRef<HTMLDivElement>(null);
     const [panelHeight, setPanelHeight] = useState(0);
 
-    // NEW: hide border when at very top
+    // Track if we're at the very top of the page
     const [atTop, setAtTop] = useState(true);
     useEffect(() => {
         const onScroll = () => setAtTop(window.scrollY === 0);
-        onScroll(); // set initial
+        onScroll(); // initial
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Measure mobile panel height for smooth collapse
+    // Measure mobile panel height
     useEffect(() => {
         if (!panelRef.current) return;
         setPanelHeight(panelRef.current.scrollHeight);
     }, [open]);
 
-    // Close on Escape (mobile)
+    // Close on Esc
     useEffect(() => {
-        function onKey(e: KeyboardEvent) {
-            if (e.key === "Escape") setOpen(false);
-        }
+        const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
         if (open) document.addEventListener("keydown", onKey);
         return () => document.removeEventListener("keydown", onKey);
     }, [open]);
 
     return (
         <nav
-            className={[
-                "sticky top-0 z-50 bg-white/95 backdrop-blur",
-                // border only when NOT at the very top
-                atTop ? "" : "border-b border-black/5",
-                "transition-[border-color] duration-150",
-            ].join(" ")}
+            className="sticky top-0 z-50 bg-white/95 backdrop-blur"
+            // make it a containing block for the feather
+            style={{ position: "sticky" }}
         >
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                 {/* Left: Logo */}
@@ -62,7 +57,7 @@ export default function Nav() {
                         <Link href="#contact" className="hover:text-black transition">Contact</Link>
                     </div>
 
-                    {/* Burger (mobile only, no hover effect) */}
+                    {/* Burger (mobile only) */}
                     <button
                         type="button"
                         aria-label="Open menu"
@@ -86,7 +81,20 @@ export default function Nav() {
                 </div>
             </div>
 
-            {/* MOBILE COLLAPSIBLE PANEL (in flow, pushes content) */}
+            {/* Feather bottom edge (appears when scrolled, hides at top) */}
+            <div
+                aria-hidden
+                className={[
+                    "pointer-events-none relative h-0",
+                    // the feather element
+                    "after:absolute after:inset-x-0 after:-bottom-px after:h-3",
+                    "after:bg-gradient-to-b after:from-black/10 after:to-transparent",
+                    "after:transition-opacity after:duration-200",
+                    atTop ? "after:opacity-0" : "after:opacity-100",
+                ].join(" ")}
+            />
+
+            {/* MOBILE COLLAPSIBLE PANEL (pushes content down) */}
             <div
                 id="mobile-panel"
                 className="md:hidden overflow-hidden transition-[max-height] duration-200 ease-out border-t border-black/5"
@@ -106,3 +114,4 @@ export default function Nav() {
         </nav>
     );
 }
+
