@@ -9,7 +9,16 @@ export default function Nav() {
     const panelRef = useRef<HTMLDivElement>(null);
     const [panelHeight, setPanelHeight] = useState(0);
 
-    // Measure content height for smooth max-height animation
+    // NEW: hide border when at very top
+    const [atTop, setAtTop] = useState(true);
+    useEffect(() => {
+        const onScroll = () => setAtTop(window.scrollY === 0);
+        onScroll(); // set initial
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
+    // Measure mobile panel height for smooth collapse
     useEffect(() => {
         if (!panelRef.current) return;
         setPanelHeight(panelRef.current.scrollHeight);
@@ -25,7 +34,14 @@ export default function Nav() {
     }, [open]);
 
     return (
-        <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-black/5">
+        <nav
+            className={[
+                "sticky top-0 z-50 bg-white/95 backdrop-blur",
+                // border only when NOT at the very top
+                atTop ? "" : "border-b border-black/5",
+                "transition-[border-color] duration-150",
+            ].join(" ")}
+        >
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                 {/* Left: Logo */}
                 <Link href="/" className="flex items-center">
@@ -34,7 +50,6 @@ export default function Nav() {
 
                 {/* Right: CTA + Desktop links + Burger */}
                 <div className="flex items-center gap-4">
-                    {/* CTA (always visible) */}
                     <a
                         href={IOS_URL}
                         className="inline-flex items-center rounded-md bg-black px-4 py-2 text-xs md:text-sm font-semibold text-white leading-none active:scale-[0.99] transition"
@@ -42,7 +57,6 @@ export default function Nav() {
                         Get Lessn free
                     </a>
 
-                    {/* Desktop links (order: Features, Contact) */}
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-800">
                         <Link href="#features" className="hover:text-black transition">Features</Link>
                         <Link href="#contact" className="hover:text-black transition">Contact</Link>
@@ -78,21 +92,12 @@ export default function Nav() {
                 className="md:hidden overflow-hidden transition-[max-height] duration-200 ease-out border-t border-black/5"
                 style={{ maxHeight: open ? panelHeight : 0 }}
             >
-                {/* Measure actual content height */}
                 <div ref={panelRef}>
                     <div className="px-4 py-2">
-                        <Link
-                            href="#features"
-                            className="block px-1 py-3 text-sm text-gray-900"
-                            onClick={() => setOpen(false)}
-                        >
+                        <Link href="#features" className="block px-1 py-3 text-sm text-gray-900" onClick={() => setOpen(false)}>
                             Features
                         </Link>
-                        <Link
-                            href="#contact"
-                            className="block px-1 py-3 text-sm text-gray-900"
-                            onClick={() => setOpen(false)}
-                        >
+                        <Link href="#contact" className="block px-1 py-3 text-sm text-gray-900" onClick={() => setOpen(false)}>
                             Contact
                         </Link>
                     </div>
