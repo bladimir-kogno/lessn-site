@@ -9,11 +9,11 @@ export default function Nav() {
     const panelRef = useRef<HTMLDivElement>(null);
     const [panelHeight, setPanelHeight] = useState(0);
 
-    // Track top-of-page to toggle feather
+    // Track if user is at top of page
     const [atTop, setAtTop] = useState(true);
     useEffect(() => {
         const onScroll = () => setAtTop(window.scrollY === 0);
-        onScroll();
+        onScroll(); // initial
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
@@ -23,7 +23,7 @@ export default function Nav() {
         if (panelRef.current) setPanelHeight(panelRef.current.scrollHeight);
     }, [open]);
 
-    // Close on Esc (mobile)
+    // Close on Esc
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
         if (open) document.addEventListener("keydown", onKey);
@@ -31,15 +31,22 @@ export default function Nav() {
     }, [open]);
 
     return (
-        <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur">
+        <nav className="sticky top-0 z-50 bg-white">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                 {/* Left: Logo */}
                 <Link href="/" className="flex items-center">
-                    <Image src="/logo/leson_leaf_logo.svg" alt="Lessn" width={100} height={100} priority />
+                    <Image
+                        src="/logo/leson_leaf_logo.svg"
+                        alt="Lessn"
+                        width={100}
+                        height={100}
+                        priority
+                    />
                 </Link>
 
                 {/* Right: CTA + Desktop links + Burger */}
                 <div className="flex items-center gap-4">
+                    {/* CTA */}
                     <a
                         href={IOS_URL}
                         className="inline-flex items-center rounded-md bg-black px-4 py-2 text-xs md:text-sm font-semibold text-white leading-none active:scale-[0.99] transition"
@@ -47,12 +54,17 @@ export default function Nav() {
                         Get Lessn free
                     </a>
 
+                    {/* Desktop links */}
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-800">
-                        <Link href="#features" className="hover:text-black transition">Features</Link>
-                        <Link href="#contact" className="hover:text-black transition">Contact</Link>
+                        <Link href="#features" className="hover:text-black transition">
+                            Features
+                        </Link>
+                        <Link href="#contact" className="hover:text-black transition">
+                            Contact
+                        </Link>
                     </div>
 
-                    {/* Burger (mobile only, no hover bg) */}
+                    {/* Burger (mobile only) */}
                     <button
                         type="button"
                         aria-label="Open menu"
@@ -76,19 +88,19 @@ export default function Nav() {
                 </div>
             </div>
 
-            {/* Soft “feather” bottom border: only visible when not at the top */}
+            {/* Soft bottom border (only when scrolled) */}
             <div
                 aria-hidden
                 className={[
                     "pointer-events-none relative h-0",
                     "after:absolute after:inset-x-0 after:-bottom-px",
-                    "after:h-2 after:bg-gradient-to-b after:from-black/10 after:to-transparent",
+                    "after:h-px after:bg-black/10",
                     "after:transition-opacity after:duration-200",
                     atTop ? "after:opacity-0" : "after:opacity-100",
                 ].join(" ")}
             />
 
-            {/* MOBILE COLLAPSIBLE PANEL (pushes content down) */}
+            {/* Mobile slide-down menu */}
             <div
                 id="mobile-panel"
                 className="md:hidden overflow-hidden transition-[max-height] duration-200 ease-out border-t border-black/5"
@@ -96,10 +108,18 @@ export default function Nav() {
             >
                 <div ref={panelRef}>
                     <div className="px-4 py-2">
-                        <Link href="#features" className="block px-1 py-3 text-sm text-gray-900" onClick={() => setOpen(false)}>
+                        <Link
+                            href="#features"
+                            className="block px-1 py-3 text-sm text-gray-900"
+                            onClick={() => setOpen(false)}
+                        >
                             Features
                         </Link>
-                        <Link href="#contact" className="block px-1 py-3 text-sm text-gray-900" onClick={() => setOpen(false)}>
+                        <Link
+                            href="#contact"
+                            className="block px-1 py-3 text-sm text-gray-900"
+                            onClick={() => setOpen(false)}
+                        >
                             Contact
                         </Link>
                     </div>
@@ -108,4 +128,3 @@ export default function Nav() {
         </nav>
     );
 }
-
