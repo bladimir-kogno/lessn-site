@@ -29,7 +29,7 @@ export default function Nav() {
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                 {/* Left: Logo */}
                 <Link href="/" className="flex items-center">
-                    <Image src="/brinl_logo.svg" alt="Lessn" width={28} height={28} priority />
+                    <Image src="/logo/leson_leaf_logo.svg" alt="Lessn" width={100} height={100} priority />
                 </Link>
 
                 {/* Right: CTA + Desktop links + Burger */}

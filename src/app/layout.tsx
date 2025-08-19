@@ -1,7 +1,8 @@
 import "./globals.css";
 import ModalProvider from "@/components/ModalProvider";
 
-export const metadata = {
+
+export const metadata =  {
     title: "Lessn: Plan in minutes. Teach with focus.",
     description: "Learn faster. Teach better."
 };
