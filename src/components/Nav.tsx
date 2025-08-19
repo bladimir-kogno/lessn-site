@@ -9,22 +9,21 @@ export default function Nav() {
     const panelRef = useRef<HTMLDivElement>(null);
     const [panelHeight, setPanelHeight] = useState(0);
 
-    // Track if we're at the very top of the page
+    // Track top-of-page to toggle feather
     const [atTop, setAtTop] = useState(true);
     useEffect(() => {
         const onScroll = () => setAtTop(window.scrollY === 0);
-        onScroll(); // initial
+        onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
     // Measure mobile panel height
     useEffect(() => {
-        if (!panelRef.current) return;
-        setPanelHeight(panelRef.current.scrollHeight);
+        if (panelRef.current) setPanelHeight(panelRef.current.scrollHeight);
     }, [open]);
 
-    // Close on Esc
+    // Close on Esc (mobile)
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
         if (open) document.addEventListener("keydown", onKey);
@@ -32,11 +31,7 @@ export default function Nav() {
     }, [open]);
 
     return (
-        <nav
-            className="sticky top-0 z-50 bg-white/95 backdrop-blur"
-            // make it a containing block for the feather
-            style={{ position: "sticky" }}
-        >
+        <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                 {/* Left: Logo */}
                 <Link href="/" className="flex items-center">
@@ -57,13 +52,13 @@ export default function Nav() {
                         <Link href="#contact" className="hover:text-black transition">Contact</Link>
                     </div>
 
-                    {/* Burger (mobile only) */}
+                    {/* Burger (mobile only, no hover bg) */}
                     <button
                         type="button"
                         aria-label="Open menu"
                         aria-expanded={open}
                         aria-controls="mobile-panel"
-                        onClick={() => setOpen(v => !v)}
+                        onClick={() => setOpen((v) => !v)}
                         className="inline-flex h-9 w-9 items-center justify-center rounded-md md:hidden active:scale-[0.98] transition"
                     >
                         <svg
@@ -81,14 +76,13 @@ export default function Nav() {
                 </div>
             </div>
 
-            {/* Feather bottom edge (appears when scrolled, hides at top) */}
+            {/* Soft “feather” bottom border: only visible when not at the top */}
             <div
                 aria-hidden
                 className={[
                     "pointer-events-none relative h-0",
-                    // the feather element
-                    "after:absolute after:inset-x-0 after:-bottom-px after:h-3",
-                    "after:bg-gradient-to-b after:from-black/10 after:to-transparent",
+                    "after:absolute after:inset-x-0 after:-bottom-px",
+                    "after:h-2 after:bg-gradient-to-b after:from-black/10 after:to-transparent",
                     "after:transition-opacity after:duration-200",
                     atTop ? "after:opacity-0" : "after:opacity-100",
                 ].join(" ")}
